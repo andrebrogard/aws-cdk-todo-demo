@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo app</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-purple-100 flex flex-row justify-center">
+    <div class="w-96 m-16 flex flex-col align-items">
+        <div class="text-lg text-center w-100">ToDo app</div>
+        <div class="text-md" id="todoroot">  
+            <div id="loading_indicator" class="flex flex-row justify-center m-4">
+                <span class="animate-pulse text-md font-medium">Loading...</span>
+            </div>         
+        </div>
+        <div class="flex flex-row align-items">
+            <div class="p-2 w-4/5"><input id="todoinput" placeholder="Give feedback to.." class="w-full p-2"></input></div>
+            <div class="p-2 w-1/5 flex flex-col justify-center"><button id="todoadd" disabled class="p-1 bg-blue-400 rounded-md">Add</button></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
