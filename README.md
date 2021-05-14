@@ -7,7 +7,7 @@ This repo serves as a sample application of AWS CDK in an organization. The pipe
 ## Prerequisities
 
 To try out the code in this repo you need
-* Several AWS accounts with basically full access. I advise to use accounts in an AWS organization. This demo uses 4 accounts. It is possible to use fewer. 
+* Several AWS accounts with basically full access. I advise to use accounts in an AWS organization. This demo uses 3 accounts at minimum. It is possible to use more. 
 * to install AWS CLI and AWS CDK and configure your credentials such that you have access to each account through the cli.
 
 To try out the application locally you would need:
