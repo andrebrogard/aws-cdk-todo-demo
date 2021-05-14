@@ -1,4 +1,4 @@
-# aws-cdk-todo-node-multi-pipeline-ecs
+# AWS CDK TODO DEMO
 
 ## Purpose
 
@@ -21,11 +21,13 @@ To understand what is happening, i recommend to be familiar with:
 
 ## Accounts
 
-This demo uses 4 AWS accounts, they are named Tools, Development, Staging and Production. Tools holds all the resources to deploy into Dev, Staging and Production. It is where the code is build and unit tested, using AWS CodeBuild, and it is where the pipeline resides.
+This demo uses 3 AWS accounts, they are named Tools, Development, and Production. Tools holds all the resources to deploy into Dev, Staging and Production. It is where the code is build and unit tested, using AWS CodeBuild, and it is where the pipeline resides.
+
+You could add to the pipeline to also include a Staging account if you want to.
 
 ## Pipeline
 
-What does the pipeline do exactly? The pipeline is only deployed to the Tools account. The pipeline will fetch the source code and perform unit tests. Then it will update itself(the pipeline) and deploy the application stack into the Staging account. Next follows some validation tests and then with manual approval it can be deployed to the Production account. 
+What does the pipeline do exactly? The pipeline is only deployed to the Tools account. The pipeline will fetch the source code and perform unit tests. Then it will update itself(the pipeline) and deploy the application stack into the dev account. Next follows some validation tests and then with manual approval it can be deployed to the Production account. 
 
 The application stack is defined seperately, but is used as a configureable module withing the pipeline. It builds the Docker image of the app/ directory and launches this application in AWS ECS as a Fargate service. Two instances of the applicaiton will be run under an elastic load balancer.
 
@@ -41,13 +43,12 @@ You need to fork or copy this repository to your own. The pipeline assumes a git
 
 ### AWS Setup
 
-To deploy the pipeline, we first need to bootstrap our environments. The Staging and Production environments must be bootstrap with a trust flag to our Tools account. 
+To deploy the pipeline, we first need to bootstrap our environments. The Dev and Production environments must be bootstrap with a trust flag to our Tools account. 
 
 Assume for this demo that the these are the AWS account numbers, there is also AWS CLI profiles configured for each of these accounts: 
 * Tools account: 111111111111
 * Development account: 222222222222
-* Staging account: 333333333333
-* Production account: 444444444444
+* Production account: 333333333333
 
 Note: Make sure that you have a default region set in your config file for AWS CLI.
 
@@ -60,8 +61,7 @@ Add to the `cdk.context.json` file the target account numbers. It should look li
 ```
 {
     "targetDevAccount": 222222222222,
-    "targetStageAccount": 333333333333,
-    "targetProdAccount": 444444444444
+    "targetProdAccount": 333333333333
 }
 ```
 
@@ -91,13 +91,13 @@ To bootstrap the Tools account, run:
 cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess --profile toolsuser
 ```
 
-### Development, Staging and Production
+### Development and Production
 
 To bootstrap the other accounts, run: 
 ```
-cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess --profile stageuser --trust 111111111111
+cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess --profile devuser --trust 111111111111
 ```
-Then also run this command with the development and production profile. This creates IAM roles that the pipeline in the tools account may assume, because of the 'trust' flag.
+Then also run this command with the production user. This creates IAM roles that the pipeline in the tools account may assume, because of the 'trust' flag.
 
 ## Deployment
 
@@ -118,7 +118,7 @@ First, destroy the pipeline by running:
 ```
 cdk destroy DemoPipeline --profile toolsuser
 ```
-Destroying the pipeline will destroy the stacks that the pipeline has provisioned to dev, stage and prod. You need to remove all stacks that have been provisioned yourself. 
+Destroying the pipeline will destroy the stacks that the pipeline has provisioned to dev and prod. You need to remove all stacks that have been provisioned yourself from each account.
 
-In cloudformation, delete the Application stacks in all accounts, delete the pipeline stack. 
+In cloudformation, delete the Application stacks in the dev and prod accounts, but first delete the pipeline stack in the tools account.
 
