@@ -21,7 +21,7 @@ To understand what is happening, i recommend to be familiar with:
 
 ## Accounts
 
-This demo uses 3 AWS accounts, they are named Tools, Development, and Production. Tools holds all the resources to deploy into Dev, Staging and Production. It is where the code is build and unit tested, using AWS CodeBuild, and it is where the pipeline resides.
+This demo uses 3 AWS accounts, they are named Tools, Development, and Production. Tools holds all the resources to deploy into Dev and Production. It is where the code is built and unit tested, using AWS CodeBuild, and it is where the pipeline resides.
 
 You could add to the pipeline to also include a Staging account if you want to.
 
